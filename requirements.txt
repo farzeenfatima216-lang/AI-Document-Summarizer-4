@@ -1,0 +1,14 @@
+streamlit
+pypdf
+PyMuPDF
+easyocr
+Pillow
+numpy
+python-docx
+fpdf
+langchain
+langchain-community
+langchain-core
+langchain-groq
+faiss-cpu
+sentence-transformers

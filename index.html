@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>AI Document Summarizer &amp; Q&amp;A Assistant</title>
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAAAMAAAAAAAAAAAAAAAEAAL///wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="sidebar">
+        <div class="brand-card">
+          <div class="brand-mark">AI</div>
+          <div>
+            <p class="brand-name">DocAI</p>
+            <span class="brand-tag">Summarizer</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Primary navigation">
+          <a href="#uploadSection" class="nav-link active">Upload Document</a>
+          <a href="#summarySection" class="nav-link">Summary</a>
+          <a href="#qaSection" class="nav-link">Ask Questions</a>
+          <a href="#exportSection" class="nav-link">Export</a>
+          <a href="#aboutSection" class="nav-link">About</a>
+        </nav>
+
+        <div class="sidebar-note">
+          <p>Modern document intelligence with summary, key points, OCR support, and chat-style Q&amp;A.</p>
+        </div>
+      </aside>
+
+      <div class="page-content">
+        <header class="topbar">
+          <div class="topbar-brand">
+            <div class="topbar-logo">AI</div>
+            <div>
+              <p class="topbar-title">AI Document Summarizer</p>
+              <span class="topbar-subtitle">Upload, summarize, and ask questions with confidence.</span>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <a class="secondary-btn" href="#health">Health check</a>
+          </div>
+        </header>
+
+        <main class="content-area">
+          <section class="hero-card">
+            <div class="hero-copy">
+              <p class="eyebrow">Smart document intelligence</p>
+              <h1>AI Document Summarizer &amp; Q&amp;A Assistant</h1>
+              <p>Upload your documents, generate summaries, extract key points, and ask questions using AI.</p>
+              <div class="hero-actions">
+                <a href="#uploadSection" class="primary-btn">Upload a document</a>
+                <a href="#qaSection" class="secondary-btn">Chat with your file</a>
+              </div>
+            </div>
+            <div class="hero-visual">
+              <div class="visual-card">
+                <div class="visual-glow"></div>
+                <div class="visual-stack">
+                  <div class="visual-sheet"></div>
+                  <div class="visual-sheet reversed"></div>
+                  <div class="visual-icon"><span>AI</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card upload-card" id="uploadSection">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Upload Document</p>
+                <h2>Drag &amp; drop your file or choose from disk</h2>
+              </div>
+              <span class="info-pill">Supported: PDF · DOCX · TXT</span>
+            </div>
+
+            <div id="dropZone" class="drop-zone">
+              <div class="drop-icon">📄</div>
+              <div>
+                <p class="drop-title">Drag files here</p>
+                <p class="drop-subtitle">or click to browse your computer</p>
+              </div>
+            </div>
+            <input id="fileInput" type="file" accept=".pdf,.docx,.txt,.md,.json" multiple class="file-input" />
+
+            <div id="selectedFiles" class="file-list placeholder">
+              <p>No files selected yet.</p>
+            </div>
+
+            <div class="prompt-grid">
+              <div class="prompt-block">
+                <label for="summaryVariant">Summary style</label>
+                <select id="summaryVariant">
+                  <option value="structured_grounded" selected>Structured Grounded</option>
+                  <option value="concise">Concise</option>
+                  <option value="audience_first">Audience-first</option>
+                </select>
+              </div>
+              <div class="prompt-block">
+                <label for="keyPointsVariant">Key points style</label>
+                <select id="keyPointsVariant">
+                  <option value="evidence_tagged" selected>Evidence-tagged</option>
+                  <option value="bullet_points">Bullet Points</option>
+                  <option value="executive_summary">Executive Summary</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="button-row">
+              <button id="uploadBtn" type="button" class="primary-btn">Analyze document</button>
+              <button id="exportSummaryTopBtn" type="button" class="secondary-btn export-summary-btn">Export summary</button>
+            </div>
+
+            <div id="progressContainer" class="progress-panel hidden">
+              <div class="progress-row">
+                <div>
+                  <p class="progress-label">Upload progress</p>
+                  <div class="progress-track"><div id="uploadProgress" class="progress-fill"></div></div>
+                </div>
+                <span id="taskBadge" class="task-badge">Idle</span>
+              </div>
+              <div class="progress-row">
+                <div>
+                  <p class="progress-label">Analysis progress</p>
+                  <div class="progress-track"><div id="analysisProgress" class="progress-fill"></div></div>
+                </div>
+                <span id="progressStatus" class="progress-text">Ready to upload</span>
+              </div>
+            </div>
+
+            <div id="statusMessage" class="status-text">Waiting for a file to begin.</div>
+          </section>
+
+          <section class="section-row" id="summarySection">
+            <article class="card summary-panel">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Summary</p>
+                  <h2>Generated summary</h2>
+                </div>
+                <button id="copySummaryBtn" class="secondary-btn">Copy summary</button>
+              </div>
+              <div id="summary" class="content-card">Your summary will appear here after processing.</div>
+            </article>
+
+            <article class="card keypoints-panel">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Key Points</p>
+                  <h2>Important takeaways</h2>
+                </div>
+              </div>
+              <ul id="keyPoints" class="keypoint-list">
+                <li>Upload a file to generate a summary and key points.</li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="section-card preview-card" id="previewSection">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Document Preview</p>
+                <h2>Preview extracted text</h2>
+              </div>
+            </div>
+            <div id="documentPreview" class="content-card">Document preview will appear here after upload.</div>
+          </section>
+
+          <section class="section-card indexed-chunks-card" id="indexedChunksSection">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Indexed Chunks</p>
+                <h2>All generated chunks</h2>
+              </div>
+            </div>
+            <div id="indexedChunks" class="content-card">Indexed chunks will appear here after analysis.</div>
+          </section>
+
+          <section class="section-card important-panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Important information</p>
+                <h2>Document insights at a glance</h2>
+              </div>
+            </div>
+            <div id="importantInfo" class="info-grid">
+              <div class="info-card">
+                <span>Extraction method</span>
+                <strong id="extractionMethodValue">Text layer</strong>
+              </div>
+              <div class="info-card">
+                <span>Indexed chunks</span>
+                <strong id="chunkCountValue">0</strong>
+              </div>
+              <div class="info-card">
+                <span>Uploaded documents</span>
+                <strong id="documentCountValue">0</strong>
+              </div>
+              <div class="info-card">
+                <span>Document length</span>
+                <strong id="documentLengthValue">0 chars</strong>
+              </div>
+              <div class="info-card">
+                <span>OCR pages</span>
+                <strong id="ocrPages">None</strong>
+              </div>
+              <div class="info-card">
+                <span>QA prompt</span>
+                <strong id="qaPromptVariant">structured_grounded</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-card chat-card" id="qaSection">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Ask Questions</p>
+                <h2>Chat with your document</h2>
+              </div>
+              <button id="copyAnswerBtn" class="secondary-btn">Copy last answer</button>
+            </div>
+            <div id="conversationHistory" class="conversation-history">
+              <div class="chat-placeholder">
+                <p>Ask a question about the uploaded document to get a focused answer.</p>
+              </div>
+            </div>
+            <div id="typingIndicator" class="typing-indicator hidden">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              AI is generating a response...
+            </div>
+            <div id="ragInfo" class="content-card" style="margin-top:12px;display:none;">
+              <strong>Retrieval Info:</strong>
+              <div id="retrievalMethod" style="color:var(--muted);margin-top:6px;">No retrieval yet</div>
+            </div>
+            <div id="retrievalContext" class="content-card" style="margin-top:12px;display:none;">
+              <strong>Retrieval Context</strong>
+              <div id="retrievedChunksList" style="margin-top:10px;color:var(--muted);">Top retrieved chunks will appear here.</div>
+            </div>
+            <div class="prompt-grid compact">
+              <div class="prompt-block">
+                <label for="qaVariant">QA prompt</label>
+                <select id="qaVariant">
+                  <option value="structured_grounded" selected>Structured Grounded</option>
+                  <option value="concise">Concise</option>
+                  <option value="reasoned_grounded">Reasoned Grounded</option>
+                </select>
+              </div>
+            </div>
+            <div class="question-row">
+              <input type="text" id="question" placeholder="Ask a question about the document..." />
+              <button id="askBtn" type="button" class="primary-btn">Ask</button>
+            </div>
+          </section>
+
+          <section class="section-card citation-card" id="exportSection">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Export</p>
+                <h2>Download your summary</h2>
+              </div>
+              <div class="export-meta">
+                <label for="exportFormat">Format</label>
+                <select id="exportFormat">
+                  <option value="txt">TXT</option>
+                  <option value="docx">DOCX</option>
+                  <option value="pdf">PDF</option>
+                </select>
+                <button id="exportSummaryBtn" class="secondary-btn export-summary-btn">Export summary</button>
+              </div>
+            </div>
+            <div class="content-card citation-panel" id="sourceCitations">
+              Sources for each answer will appear here.
+            </div>
+          </section>
+
+          <section class="section-card about-card" id="aboutSection">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">About</p>
+                <h2>Designed for professional AI workflows</h2>
+              </div>
+            </div>
+            <p>AI Document Summarizer is a clean and modern workspace for extracting intelligence from documents. It keeps your workflow efficient with drag-and-drop upload, automatic analysis, and chat-style Q&amp;A.</p>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

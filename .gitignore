@@ -1,0 +1,18 @@
+# Virtual environments - never commit these (1.7 GB each)
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Secrets
+.env
+
+# Logs and scratch files
+*.log
+server.log
+temp_*
+tmp_*
+*.out
